@@ -18,7 +18,28 @@ public:
         }
         if(sum% 2 == 0)sum = sum/2;
         else return false;
-        vector<vector<int>> dp(nums.size() , vector<int>(sum+1 , -1));
-        return f(nums.size() -1 , sum , nums ,dp);
+        vector<vector<bool>> dp(nums.size() , vector<bool>(sum+1 , false));
+        for(int i=0;i<nums.size();i++){
+            dp[i][0] =true;
+        }
+        for(int j= 1; j<=sum; j++){
+            if(nums[0] == sum){
+                dp[0][sum] = true;
+            }
+            else{
+                dp[0][sum] = false;
+            }
+        }
+        for(int i =1 ;i<nums.size() ;i++){
+            for(int j=1;j<=sum ;j++){
+                bool notpick = dp[i-1][j];
+                bool pick = false;
+                if(nums[i] <= j){
+                    pick = dp[i-1][j - nums[i]];
+                }
+                dp[i][j] = pick||notpick;
+            }
+        }
+        return dp[nums.size() -1][sum];
     }
 };
