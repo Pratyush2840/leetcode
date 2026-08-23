@@ -1,49 +1,33 @@
 class Solution {
 public:
-    int n;
+    int findNumberOfLIS(std::vector<int>& nums) {
+        int n = nums.size();
+        vector<int> length(n, 1);
+        vector<int> count(n, 1);
 
-    pair<int, int> solve(int ind, int prev, vector<int>& nums,vector<vector<pair<int, int>>>& dp) {
-        if (ind == n) {
-            return {0, 1};
-        }
-        if (dp[ind][prev + 1].first != -1) {
-            return dp[ind][prev + 1];
-        }
-
-        pair<int, int> nottake = solve(ind + 1, prev, nums, dp);
-
-        pair<int, int> pick = {0, 0};
-
-        if (prev == -1 || nums[ind] > nums[prev]) {
-            pair<int, int> temp =
-                solve(ind + 1, ind, nums, dp);
-
-            pick = {1 + temp.first, temp.second};
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[j] < nums[i]) {
+                    if (length[j] + 1 > length[i]) {
+                        length[i] = length[j] + 1;
+                        count[i] = 0;
+                    }
+                    if (length[j] + 1 == length[i]) {
+                        count[i] += count[j];
+                    }
+                }
+            }
         }
 
-        pair<int, int> ans;
+        int maxLength = *max_element(length.begin(), length.end());
+        int result = 0;
 
-        if (pick.first > nottake.first) {
-            ans = pick;
-        }
-        else if (nottake.first > pick.first) {
-            ans = nottake;
-        }
-        else {
-            ans.first = pick.first;
-            ans.second = pick.second + nottake.second;
+        for (int i = 0; i < n; i++) {
+            if (length[i] == maxLength) {
+                result += count[i];
+            }
         }
 
-        return dp[ind][prev + 1] = ans;
-    }
-
-    int findNumberOfLIS(vector<int>& nums) {
-        n = nums.size();
-
-        vector<vector<pair<int, int>>> dp(
-            n, vector<pair<int, int>>(n + 1, {-1, -1})
-        );
-
-        return solve(0, -1, nums, dp).second;
+        return result;
     }
 };
