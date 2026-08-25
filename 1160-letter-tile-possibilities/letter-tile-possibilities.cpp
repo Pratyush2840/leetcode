@@ -1,27 +1,23 @@
 class Solution {
-public:
-    set<string> st;
-
-    void backtrack(string& tiles, int i) {
-        if (i == tiles.size()) {
-            return;
-        }
-
-        for (int j = i; j < tiles.size(); j++) {
-            swap(tiles[i], tiles[j]);
-
-            string s = tiles.substr(0, i + 1);
-            st.insert(s);
-
-            backtrack(tiles, i + 1);
-
-            swap(tiles[i], tiles[j]);
+public:  
+    int n;
+    void backtrack(string tiles,int idx,unordered_set<string>&result,vector<bool>&used,string &cur){
+        result.insert(cur);
+        for(int i=0;i<n;i++){
+          if(used[i])continue;
+          used[i]=true;
+          cur.push_back(tiles[i]);
+          backtrack(tiles,idx+1,result,used,cur);
+          used[i]=false;
+          cur.pop_back();
         }
     }
-
     int numTilePossibilities(string tiles) {
-        st.clear();
-        backtrack(tiles, 0);
-        return st.size();
+        n=tiles.size();
+        string cur="";
+        unordered_set<string>result;
+        vector<bool>used(n,false);
+        backtrack(tiles,0,result,used,cur);
+        return result.size()-1;
     }
 };
