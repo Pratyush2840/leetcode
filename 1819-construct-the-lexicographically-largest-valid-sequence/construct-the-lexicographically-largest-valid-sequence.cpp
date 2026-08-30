@@ -16,9 +16,7 @@ public:
                 if (i == 1) {
                     used[i] = true;
                     arr[ind] = 1;
-                    if(ans.size() > 0 )return;
                     solve(ind + 1, n, arr, used,ans);
-                    if(ans.size() > 0 )return;
                     arr[ind] = 0;
                     used[i] = false;
                 }
@@ -27,9 +25,7 @@ public:
                         used[i] = true;
                         arr[ind] = i;
                         arr[ind + i] = i;
-                        if(ans.size() > 0 )return;
                         solve(ind+1 , n , arr,used,ans);
-                        if(ans.size() > 0 )return;
                         used[i] = false;
                         arr[ind] = 0;
                         arr[ind + i ] =0;
