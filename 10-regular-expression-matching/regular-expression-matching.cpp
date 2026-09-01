@@ -1,39 +1,22 @@
 class Solution {
 public:
-    vector<vector<int>> dp;
-
-    bool solve(int i, int j, string &s, string &p) {
-        if (i == s.size() && j == p.size())
-            return true;
-
-        if (j == p.size())
-            return false;
-
-        if (dp[i][j] != -1)
-            return dp[i][j];
-
-        bool match = (i < s.size() && 
-                     (s[i] == p[j] || p[j] == '.'));
-
-        if (j + 1 < p.size() && p[j + 1] == '*') {
-            bool notTake = solve(i, j + 2, s, p);
-            bool take = match && solve(i + 1, j, s, p);
-
-            return dp[i][j] = take || notTake;
-        }
-
-        if (match)
-            return dp[i][j] = solve(i + 1, j + 1, s, p);
-
-        return dp[i][j] = false;
-    }
-
     bool isMatch(string s, string p) {
-        int n = s.size();
-        int m = p.size();
-
-        dp.assign(n + 1, vector<int>(m + 1, -1));
-
-        return solve(0, 0, s, p);
+        int n = s.length(), m = p.length();
+        bool dp[n+1][m+1];
+        memset(dp, false, sizeof(dp));
+        dp[0][0] = true;
+        
+        for(int i=0; i<=n; i++){
+            for(int j=1; j<=m; j++){
+                if(p[j-1] == '*'){
+                    dp[i][j] = dp[i][j-2] || (i > 0 && (s[i-1] == p[j-2] || p[j-2] == '.') && dp[i-1][j]);
+                }
+                else{
+                    dp[i][j] = i > 0 && dp[i-1][j-1] && (s[i-1] == p[j-1] || p[j-1] == '.');
+                }
+            }
+        }
+        
+        return dp[n][m];
     }
 };
