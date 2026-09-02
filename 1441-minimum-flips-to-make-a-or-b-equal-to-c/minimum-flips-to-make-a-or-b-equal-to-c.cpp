@@ -1,18 +1,12 @@
 class Solution {
 public:
     int minFlips(int a, int b, int c) {
-        int cnt = 0;
-        for(int i = 0 ;i < 32 ; i++){
-            int tempa = a & ( 1<<i);
-            int tempb = b & ( 1<<i);
-            int tempc = c & (1<< i);
-            cout<<tempa<<" "<<tempb<<" "<<tempc<<endl;
-            if((tempa | tempb) == tempc)continue;
-            if(tempa != 0 && tempb != 0)cnt += 2;
-            else{
-                cnt++;
-            }
-        }
-        return cnt;
+        if( (a | b) == c )return 0;
+        int result = ((a|b) ^ c);
+        int result2 = (a & b);
+        int result3 = (result & result2);
+        int temp1 = __builtin_popcount(result);
+        int temp2 = __builtin_popcount(result3);
+        return temp1 + temp2;
     }
 };
