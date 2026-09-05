@@ -16,6 +16,7 @@ public:
             while(length--){
                 auto cur = q.front();
                 q.pop();
+                visited.insert(cur);
                 for(char c = 'a' ; c <= 'z' ; c++){
                     for(int i = 0 ;i <n ; i++){
                         string temp = cur;
@@ -24,7 +25,7 @@ public:
                             if(temp == endWord){
                                 return ans+1;
                             }
-                            visited.insert(temp);
+                            //visited.insert(temp);
                             q.push(temp);
                         }
                     }
