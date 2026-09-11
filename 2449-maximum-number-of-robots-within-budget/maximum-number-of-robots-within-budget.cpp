@@ -1,38 +1,55 @@
 class Solution {
 public:
-    int maximumRobots(vector<int>& chargeTimes,vector<int>& runningCosts,long long budget) {
-        int n = chargeTimes.size();
-        vector<int> q(n);
-        int front = 0;
-        int back = 0;
-
+    bool check(vector<int>& charge, vector<int>&running, long long &budget, int mid){
         long long sum = 0;
-        int left = 0;
-        int ans = 0;
-
-        for(int right = 0; right < n; right++) {
-
-            sum += runningCosts[right];
-            //cout<<sum<<" "<<endl;
-            while(front < back &&
-                  chargeTimes[q[back - 1]] <= chargeTimes[right]) {
-                back--;
-            }
-
-            q[back++] = right;
-            while(front < back &&chargeTimes[q[front]] +(right - left + 1) * sum > budget) {
-
-                if(q[front] == left)
-                    front++;
-
-                sum -= runningCosts[left];
-                left++;
-            }
-
-            ans = max(ans, right - left + 1);
-            //cout<<ans<<" "<<endl;
+        long long value = 0;
+        map<int, int> mp;
+        priority_queue<int, vector<int>> pq;
+        for(int i = 0; i < mid; i++){
+            sum += running[i];
+            pq.push(charge[i]);
         }
-
+        value = sum;
+        value *= mid;
+        value += pq.top();
+        //cout<<"phele"<<value<<endl;
+        if(value <= budget) return true;
+        for(int i = mid; i < (int)charge.size(); i++){
+            sum -= running[i - mid];
+            mp[charge[i - mid]] ++;
+            while(mp.find(pq.top()) != mp.end()){
+                //cout<<pq.top()<<" ";
+                mp[pq.top()]--;
+                if(mp[pq.top()] == 0)
+                    mp.erase(pq.top());
+                pq.pop();
+            }
+            sum += running[i];
+            pq.push(charge[i]);
+            value = sum;
+            value *= mid;
+            value += pq.top();
+            //cout<<"baad mein"<<value<<endl;
+            if(value <= budget)return true;
+        }
+ 
+        return false;
+    }
+ 
+    int maximumRobots(vector<int>& chargeTimes, vector<int>& runningCosts, long long budget) {
+        int n = chargeTimes.size();
+        int l = 1, r = n;
+        int ans = 0;
+        while(l <= r){
+            int mid = (l + r) / 2;
+            if(check(chargeTimes, runningCosts, budget, mid)){
+                //cout<<ans<<endl;
+                ans = mid;
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
         return ans;
     }
 };
