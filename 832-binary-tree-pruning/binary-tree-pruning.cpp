@@ -1,30 +1,25 @@
 class Solution {
 public:
-
-    bool solve(TreeNode* root) {
-        if (root == nullptr) {
+    bool isonePresent(TreeNode* node){
+        if(node == NULL){
             return false;
         }
-
-        bool left = solve(root->left);
-        bool right = solve(root->right);
-
-        if (!left) {
-            root->left = nullptr;
-        }
-
-        if (!right) {
-            root->right = nullptr;
-        }
-
-        return root->val == 1 || left || right;
+        if(node->val == 1)return true;
+        return isonePresent(node->left) || isonePresent(node->right);
     }
-
     TreeNode* pruneTree(TreeNode* root) {
-        if (!solve(root)) {
-            return nullptr;
-        }
+        if(root == NULL)return NULL;
 
+        if(!isonePresent(root->left)){
+            root->left = NULL;
+        }
+        if(!isonePresent(root->right)){
+            root->right = NULL;
+        }
+        pruneTree(root->left);
+        pruneTree(root->right);
+
+        if(root->val == 0 && root->left == NULL && root->right == NULL)return NULL;
         return root;
     }
 };
