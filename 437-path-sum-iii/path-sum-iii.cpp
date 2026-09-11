@@ -1,38 +1,23 @@
 class Solution {
 public:
-    int ans=0;
-    void solve(TreeNode* root , long long sum ,int& tempans, int target){
-        if(root == NULL)return;
+    unordered_map<long long, int> mp;
+    int solve(TreeNode* root, long long sum, int target) {
+        if (root == NULL)
+            return 0;
         sum += root->val;
-        if(sum == target){
-            tempans++;
-        }
-        solve(root->left,sum,tempans,target);
-        solve(root->right, sum,tempans,target);
-    }
-    int path(TreeNode* root, int targetSum) {
-        long long sum =0;
-        int tempans = 0;
-        solve(root , sum ,tempans, targetSum);
-        return tempans;
+        int ans = 0;
+        if (mp.count(sum - target))
+            ans += mp[sum - target];
+        if (sum == target)
+            ans++;
+        mp[sum]++;
+        ans += solve(root->left, sum, target);
+        ans += solve(root->right, sum, target);
+        mp[sum]--;
+        return ans;
     }
     int pathSum(TreeNode* root, int targetSum) {
-        if(root == NULL)return 0;
-        queue<TreeNode*> q;
-        q.push(root);
-        while(!q.empty()){
-            auto it = q.front();
-            q.pop();
-            if(it){
-                ans += path(it,targetSum);
-            }
-            if(it->left){
-                q.push(it->left);
-            }
-            if(it->right){
-                q.push(it->right);
-            }
-        }
-        return ans;
+        mp.clear();
+        return solve(root, 0, targetSum);
     }
 };
