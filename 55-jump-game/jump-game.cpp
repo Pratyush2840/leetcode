@@ -1,22 +1,16 @@
 class Solution {
 public:
-    int n ;
-    bool solve(int ind , vector<int> & nums , vector<int> & dp){
-        if(ind > n)return false;
-        if(ind == n-1)return true;
-        if(dp[ind] != -1)return dp[ind];
-
-        int jumps = nums[ind];
-        for(int i = ind +1 ;i <= ind + jumps ; i++){
-            if(solve(i , nums ,dp)){
-                return dp[ind] = true;
+    bool canJump(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> dp(n,0);
+        dp[0] = 1;
+        for(int i = 1 ; i < n ; i++){
+            for(int j = 0 ;j<i;j++){
+                if(dp[j] == true && j+nums[j] >= i){
+                    dp[i] = 1;
+                }
             }
         }
-        return dp[ind] = false;
-    }
-    bool canJump(vector<int>& nums) {
-        n = nums.size();
-        vector<int> dp(n,-1);
-        return solve(0 , nums,dp);
+        return dp[n-1];
     }
 };
