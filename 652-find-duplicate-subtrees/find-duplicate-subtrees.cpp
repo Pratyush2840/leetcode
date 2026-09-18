@@ -1,6 +1,6 @@
 class Solution {
 public:
-    string DFS(TreeNode* root, map<string, int>& mp, vector<TreeNode*>& res){
+    string DFS(TreeNode* root, unordered_map<string, int>& mp, vector<TreeNode*>& res){
         if(root == NULL) 
             return "NULL";
         string s = to_string(root->val) + "," + DFS(root->left, mp, res) + "," + DFS(root->right, mp, res);
@@ -10,7 +10,7 @@ public:
         return s;
     }
     vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {
-        map<string, int> mp;
+        unordered_map<string, int> mp;
         vector<TreeNode*>res;
         DFS(root, mp, res);
         return res;
