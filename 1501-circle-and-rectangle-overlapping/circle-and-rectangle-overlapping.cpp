@@ -1,9 +1,26 @@
 class Solution {
 public:
-    bool checkOverlap(int r, int cx, int cy, int x1, int y1, int x2, int y2) {
-        int x = clamp(cx, x1, x2) - cx;
-        int y = clamp(cy, y1, y2) - cy;
+    bool checkOverlap(int radius, int xCenter, int yCenter, int x1, int y1, int x2, int y2) {
+        int xi;
+        int yi;
 
-        return x * x + y * y <= r * r;
+        if(x1 > xCenter) {
+            xi = x1;
+        } else if(x2 < xCenter) {
+            xi = x2;
+        } else {
+            xi = xCenter;
+        }
+
+
+        if(y1 > yCenter) {
+            yi = y1;
+        } else if(y2 < yCenter) {
+            yi = y2;
+        } else {
+            yi = yCenter;
+        }
+
+        return sqrt((xi - xCenter)*(xi - xCenter) + (yi - yCenter)*(yi - yCenter)) <= radius;
     }
 };
