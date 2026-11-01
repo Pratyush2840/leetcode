@@ -8,7 +8,7 @@ public:
         if (r1 >= n || c1 >= n ||r2 >= n || c2 >= n ||grid[r1][c1] == -1 ||grid[r2][c2] == -1) {
             return -1e9;
         }
-        if (r1 == n - 1 && c1 == n - 1) {
+        if (r1 == n - 1 && c1 == n - 1 && r2 == n-1 && c2 == n-1) {
             return grid[r1][c1];
         }
         if (dp[r1][c1][r2] != -1)
@@ -30,13 +30,7 @@ public:
 
     int cherryPickup(vector<vector<int>>& grid) {
         n = grid.size();
-        dp.assign(
-            n,
-            vector<vector<int>>(
-                n,
-                vector<int>(n, -1)
-            )
-        );
+        dp.assign(n,vector<vector<int>>(n,vector<int>(n, -1)));
         int ans = solve(0, 0, 0, grid);
         return max(0, ans);
     }
